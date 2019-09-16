@@ -1,0 +1,14 @@
+clc,clear;
+f=imread('lena512.bmp'); 
+times=1.5;
+F1=NearestResize(f,times);
+F2=BilinearResize(f,times);
+F3=BicubicResize(f,times);
+figure,imshow(f);
+title('origin');
+figure,imshow(F1);
+title('nearest');
+figure,imshow(F2);
+title('Bilinear');
+figure,imshow(F3);
+title('Bicubic');

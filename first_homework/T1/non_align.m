@@ -1,3 +1,4 @@
+clc,clear;
 vidobj=VideoReader("hw1_sky_1.avi");
 numFrames=vidobj.NumberOfFrames;
 f_average=[];
@@ -13,5 +14,6 @@ for i=1:numFrames
     
     if(i==30)
         imwrite(f_average,image_name,'jpg');
+        imshow(f_average);
     end
 end

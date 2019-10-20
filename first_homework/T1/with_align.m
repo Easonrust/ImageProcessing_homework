@@ -18,24 +18,24 @@
 % end
 % result
 % imwrite(result,'result.jpg','jpg');
-
+clc,clear;
 vidobj=VideoReader("hw1_sky_1.avi");
 numFrames=vidobj.NumberOfFrames;
 f_average=[];
 for i=1:numFrames
     frame=im2double(read(vidobj,i));
-    frame=rgb2gray(frame);
-    diff_min=10000;
-    result=[];
+    %frame=rgb2gray(frame);
     image_name=strcat('result\align_',num2str(i));
     image_name=strcat(image_name,'.jpg');
     if(i==1)
         f_average=frame;
     else
-        f_average=(i-1)/i*f_average+makealign(frame,f_average)/i;
+        f_average=(i-1)/i*f_average+Align(frame,f_average)/i;
     end
     
     if(i==30)
         imwrite(f_average,image_name,'jpg');
+        imshow(f_average);
+        break;
     end
 end

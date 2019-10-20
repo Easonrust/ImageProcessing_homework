@@ -1,3 +1,4 @@
+clc,clear;
 vidobj=VideoReader("hw1_sky_1.avi");
 numFrames=vidobj.NumberOfFrames;
 
@@ -8,5 +9,6 @@ for i=1:numFrames
     
     if(i==30)
         imwrite(frame,image_name,'jpg');
+        imshow(frame);
     end
 end

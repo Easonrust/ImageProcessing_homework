@@ -2,7 +2,7 @@ clc,clear;
 vidobj_1=VideoReader("hw1_sky_1.avi");
 numFrames_1=vidobj_1.NumberOfFrames;
 
-vidobj_2=VideoReader("hw1_sky_1.avi");
+vidobj_2=VideoReader("hw1_sky_2.avi");
 numFrames_2=vidobj_2.NumberOfFrames;
 
 for i=1:numFrames_1

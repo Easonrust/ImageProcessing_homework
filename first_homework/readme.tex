@@ -239,8 +239,10 @@ From the results above, we can see that with frame alignment the bluriness is re
 \end{figure}
 \subsection*{Answer} 
 
-The three images above are the histograms of the three origin images grayscale values. We can see that the contrast of the picture is very low, and the gray level is concentrated in the lower range.
-My Matlab code is followed and is saved as \textbf{a.m}
+The three images above are the histograms of the three origin images grayscale values. We can see that the contrast of the picture is very low, The components of the histogram are concentrated at the low (dark) end of the gray level, and the width is narrow, and the distribution of the pixels is uneven.\\
+In the histograms of road1 the grayscale values are concentrated at the low( dark) levels. There are two peaks.\\
+In the histograms of road2 the grayscale values are concentrated at the low( dark) levels. There is only one peak.\\
+In the histograms of road3 the grayscale values are concentrated at the low( dark) levels. There are one top peak and a few short peaks.\\My Matlab code is followed and is saved as \textbf{a.m}.
 \begin{lstlisting}
 	clc,clear;
 	I1=imread("hw1_dark_road_1.jpg");
@@ -306,7 +308,9 @@ My Matlab code is followed and is saved as \textbf{a.m}
 	\label{fig15}
 \end{figure}
 \subsection*{Answer} 
-\textbf{Figure 10-12} are the images after applying global histogram equalization to the origin images.
+\textbf{Figure 10-12} are the images after applying global histogram equalization to the origin images.\\
+We can see that The contrast of the image is greatly enhanced. For Example in the image of road1, we can see the wall, the lamp adn the car; in the image of road2, we can clearly see the car adn the house; in the picture of the road3, we can see the bushes and the department.\\
+But there are many pacthes in the image because there are jumps between different grayscale values.\\
 My Matlab code is followed and is saved as \textbf{b.m}
 \begin{lstlisting}
 	clc,clear;
@@ -394,8 +398,11 @@ My Matlab code is followed and is saved as \textbf{b.m}
 	\label{fig21}
 \end{figure}
 \subsection*{Answer} 
-\textbf{Figure 16-18} are the images after applying local adaptive histogram equalization to the origin images.
-My Matlab code is followed and is saved as \textbf{c.m}
+\textbf{Figure 16-18} are the images after applying local adaptive histogram equalization to the origin images. We can see that the effect is much better than the case using global histgram equalization, There are not much patches, which makes us feel we can see more details in the images.\\
+In the image of road1: tiles = 25*25, clipping limit =0.05;\\
+In the image of road2: tiles = 25*25, clipping limit =0.05;\\
+In the image of road3: tiles = 25*25, clipping limit =0.05;\\
+My Matlab code is followed and is saved as \textbf{c.m}.
 \begin{lstlisting}
 	clc,clear;
 	I1=imread("hw1_dark_road_1.jpg");
@@ -434,8 +441,8 @@ My Matlab code is followed and is saved as \textbf{c.m}
 	imhist(I3_process);         %display the process hist
 \end{lstlisting}
 \begin{problem}
-	d)  Apply a γ-nonlinearity mapping to each image to perform contrast enhancement, show the new image, and
-	submit the displayed image. For each image, find and report a value of γ that allows you to see more details.
+	d)  Apply a $\gamma$-nonlinearity mapping to each image to perform contrast enhancement, show the new image, and
+	submit the displayed image. For each image, find and report a value of $\gamma$ that allows you to see more details.
 	
 \end{problem}
 \begin{figure}[H]
@@ -460,24 +467,25 @@ My Matlab code is followed and is saved as \textbf{c.m}
 	\label{fig24}
 \end{figure}
 \subsection*{Answer}
-The images above are processed images after apply $\gamma$-nonlinearity mapping, the value of $\gamma$ is 0.5. My Matlab code is followed and is saved as \textbf{d.m}
+The images above are processed images after apply $\gamma$-nonlinearity mapping, the value of $\gamma$ is 0.4.\\
+My Matlab code is followed and is saved as \textbf{d.m}.
 \begin{lstlisting}
 	clc,clear;
 	I1=imread("hw1_dark_road_1.jpg");
 	I2=imread("hw1_dark_road_2.jpg");
 	I3=imread("hw1_dark_road_3.jpg");
 
-	I1_process=gama(im2double(I1),0.5);
+	I1_process=gama(im2double(I1),0.4);
 	figure('name','幂律变换后的图片','NumberTitle','off');
 	imshow(I1_process);         %display the process image
 	imwrite(I1_process,"result/I1_gama.jpg","jpg");
 
-	I2_process=gama(im2double(I1),0.5);
+	I2_process=gama(im2double(I1),0.4);
 	figure('name','幂律变换后的图片','NumberTitle','off');
 	imshow(I2_process);         %display the process image
 	imwrite(I2_process,"result/I2_gama.jpg","jpg");
 
-	I3_process=gama(im2double(I1),0.5);
+	I3_process=gama(im2double(I1),0.4);
 	figure('name','幂律变换后的图片','NumberTitle','off');
 	imshow(I3_process);         %display the process image
 	imwrite(I3_process,"result/I3_gama.jpg","jpg");

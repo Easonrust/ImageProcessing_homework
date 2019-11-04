@@ -193,12 +193,18 @@ From the results above, we can see that we reduces the noise in the video to som
 	function aligned = Align(f,g)
 	%ALIGN 此处显示有关此函数的摘要
 	%   此处显示详细说明
-	search = 20;
+	search = 10;
 	minMSE = Inf;
+	[height, width, channels] = size(f);
 	for dx = -search:search
 		for dy = -search:search
+			A=[1 0 0
+			0 1 0
+			dx dy 1];
+			tform = maketform('affine', A);
 			frameTform = zeros(size(f));
-			frameTform = imtranslate(f, [dx,dy], 'FillValues', zeros(3,1));
+
+			frameTform = imtransform(f, tform,'bilinear','XData', [1 width], 'YData', [1 height], 'FillValues', zeros(channels,1));
 
 
 			% Calculates the MSE
@@ -286,71 +292,119 @@ In the histograms of road3 the grayscale values are concentrated at the low( dar
 \end{lstlisting}
 
 \begin{problem}
-	b)  Apply global histogram equalization to the original image. Display and submit the modified image. Plot
+	b)  Apply global histogram equalization to the original image(MATLAB function: histeq is not allowed; just
+	implement it by yourself and compare yours with Matlab’s ’histeq’). Display and submit the modified image. Plot
 	and submit the histogram of the modified images grayscale values. Comment on visually desirable/undesirable
 	regions in the modified image.
 \end{problem}
 \begin{figure}[H]
  
 	\centering
-	\includegraphics[width=1\columnwidth]{T2/result/I1_global.jpg} 
+	\includegraphics[width=1\columnwidth]{T2/result/I1_myglobal.jpg} 
 	\caption{image of road1 after apply global histogram equalization}
 	\label{fig10}
 \end{figure}
 \begin{figure}[H]
  
 	\centering
-	\includegraphics[width=1\columnwidth]{T2/result/I2_global.jpg} 
+	\includegraphics[width=1\columnwidth]{T2/result/I2_myglobal.jpg} 
 	\caption{image of road2 after apply global histogram equalization}
 	\label{fig11}
 \end{figure}
 \begin{figure}[H]
  
 	\centering
-	\includegraphics[width=1\columnwidth]{T2/result/I3_global.jpg} 
+	\includegraphics[width=1\columnwidth]{T2/result/I3_myglobal.jpg} 
 	\caption{image of road3 after apply global histogram equalization}
 	\label{fig12}
 \end{figure}
 \begin{figure}[H]
  
 	\centering
-	\includegraphics[width=1\columnwidth]{T2/result/hist1_global.png} 
+	\includegraphics[width=1\columnwidth]{T2/result/hist1_myglobal.png} 
 	\caption{histogram of road1 after apply global histogram equalization}
 	\label{fig13}
 \end{figure}
 \begin{figure}[H]
  
 	\centering
-	\includegraphics[width=1\columnwidth]{T2/result/hist2_global.png} 
+	\includegraphics[width=1\columnwidth]{T2/result/hist2_myglobal.png} 
 	\caption{histogram of road2 after apply global histogram equalization}
 	\label{fig14}
 \end{figure}
 \begin{figure}[H]
  
 	\centering
-	\includegraphics[width=1\columnwidth]{T2/result/hist3_global.png} 
+	\includegraphics[width=1\columnwidth]{T2/result/hist3_myglobal.png} 
 	\caption{histogram of road3 after apply global histogram equalization}
 	\label{fig15}
+\end{figure}
+\begin{figure}[H]
+ 
+	\centering
+	\includegraphics[width=1\columnwidth]{T2/result/I1_global.jpg} 
+	\caption{image of road1 after apply histeq function}
+	\label{fig16}
+\end{figure}
+\begin{figure}[H]
+ 
+	\centering
+	\includegraphics[width=1\columnwidth]{T2/result/I2_global.jpg} 
+	\caption{image of road2 after apply histeq function}
+	\label{fig17}
+\end{figure}
+\begin{figure}[H]
+ 
+	\centering
+	\includegraphics[width=1\columnwidth]{T2/result/I3_global.jpg} 
+	\caption{image of road3 after apply histeq function}
+	\label{fig18}
+\end{figure}
+\begin{figure}[H]
+ 
+	\centering
+	\includegraphics[width=1\columnwidth]{T2/result/hist1_global.png} 
+	\caption{histogram of road1 after apply histeq function}
+	\label{fig19}
+\end{figure}
+\begin{figure}[H]
+ 
+	\centering
+	\includegraphics[width=1\columnwidth]{T2/result/hist2_global.png} 
+	\caption{histogram of road2 after apply histeq function}
+	\label{fig20}
+\end{figure}
+\begin{figure}[H]
+ 
+	\centering
+	\includegraphics[width=1\columnwidth]{T2/result/hist3_global.png} 
+	\caption{histogram of road3 after apply histeq function}
+	\label{fig21}
 \end{figure}
 \subsection*{Answer} 
 \textbf{Figure 10-12} are the images after applying global histogram equalization to the origin images.\\
 We can see that The contrast of the image is greatly enhanced. For Example in the image of road1, we can see the wall, the lamp adn the car; in the image of road2, we can clearly see the car adn the house; in the picture of the road3, we can see the bushes and the department.\\
 But there are many pacthes in the image because there are jumps between different grayscale values.\\
-My Matlab code is followed and is saved as \textbf{b.m}
+\textbf{Figure 10-12} are the images after applying histeq function in Matlab to the origin images, by comparision we can see that the results are almostly same.
+My Matlab code is followed and is saved as \textbf{b.m} and \textbf{myhisteq.m}
 \begin{lstlisting}
+	%b.m
 	clc,clear;
 	I1=imread("hw1_dark_road_1.jpg");
 	I2=imread("hw1_dark_road_2.jpg");
 	I3=imread("hw1_dark_road_3.jpg");
 	I1_process=myhisteq(I1);
 	I2_process=myhisteq(I2);
-	I3_process=myhisteq(I3);
+	I3_process=myhisteq(I3)
+	I1_process_2=histeq(I1,256);
+	I2_process_2=histeq(I2,256);
+	I3_process_2=histeq(I3,256);
 
 	figure('name','road1自定义全局直方图均衡后的图片','NumberTitle','off');
 
 	subplot(2,1,1);
 	imshow(I1_process);         %display the MY process image
-	imwrite(I1_process,"result/I1_global.jpg","jpg");
+	imwrite(I1_process,"result/I1_myglobal.jpg","jpg");
 			
 	subplot(2,1,2);
 	imhist(I1_process);         %display the MY process hist
@@ -359,7 +413,7 @@ My Matlab code is followed and is saved as \textbf{b.m}
 
 	subplot(2,1,1);
 	imshow(I2_process);         %display the MY process image
-	imwrite(I2_process,"result/I2_global.jpg","jpg");
+	imwrite(I2_process,"result/I2_myglobal.jpg","jpg");
 			
 	subplot(2,1,2);
 	imhist(I2_process);         %display the MY process hist
@@ -368,10 +422,68 @@ My Matlab code is followed and is saved as \textbf{b.m}
 
 	subplot(2,1,1);
 	imshow(I3_process);         %display the MY process image
-	imwrite(I3_process,"result/I3_global.jpg","jpg");
+	imwrite(I3_process,"result/I3_myglobal.jpg","jpg");
 			
 	subplot(2,1,2);
 	imhist(I3_process);         %display the MY process hist
+
+	figure('name','road1全局直方图均衡后的图片','NumberTitle','off');
+
+	subplot(2,1,1);
+	imshow(I1_process_2);         %display the process image
+	imwrite(I1_process_2,"result/I1_global.jpg","jpg");
+			
+	subplot(2,1,2);
+	imhist(I1_process_2);         %display the process hist
+
+	figure('name','road2全局直方图均衡后的图片','NumberTitle','off');
+
+	subplot(2,1,1);
+	imshow(I2_process_2);         %display the process image
+	imwrite(I2_process_2,"result/I2_global.jpg","jpg");
+			
+	subplot(2,1,2);
+	imhist(I2_process_2);         %display the process hist
+
+	figure('name','road3全局直方图均衡后的图片','NumberTitle','off');
+
+	subplot(2,1,1);
+	imshow(I3_process_2);         %display the process image
+	imwrite(I3_process_2,"result/I3_global.jpg","jpg");
+			
+	subplot(2,1,2);
+	imhist(I3_process_2);         %display the process hist
+
+\end{lstlisting}
+\begin{lstlisting}
+	%myhisteq.m
+	function I_process = myhisteq(I)
+	[height,width]=size(I);  %计算图片的宽和高
+
+	r=zeros(1,256);           %用来存储之前每个灰度级处像素点的个数
+	for i=1:height
+		for j=1:width
+			r(I(i,j)+1)=r(I(i,j)+1)+1;%统计每个灰度级处像素点的个数
+		end
+	end
+
+	s=zeros(1,256);
+	s(1)=r(1);
+	for i=2:256
+		s(i)=s(i-1)+r(i);        %对应书上公式计算只不过这里只算了CDF
+	end
+
+	for i=1:256
+		s(i)=floor(255*s(i)/(height*width));        %对应书上公式，这里L-1取255
+	end
+
+	I_process=I;
+	for i=1:height
+	for j=1:width
+		I_process(i,j)=s(I(i,j)+1);   %对每点处的灰度值进行映射
+	end
+	end
+	end
 \end{lstlisting}
 \begin{problem}
 	c)  Apply locally adaptive histogram equalization to the original image. Display
@@ -492,27 +604,37 @@ My Matlab code is followed and is saved as \textbf{c.m}.
 	\label{fig24}
 \end{figure}
 \subsection*{Answer}
-The images above are processed images after apply $\gamma$-nonlinearity mapping, the value of $\gamma$ is 0.4.\\
-My Matlab code is followed and is saved as \textbf{d.m}.
+The images above are processed images after apply $\gamma$-nonlinearity mapping, the value of $\gamma$ is 0.4., $c$ is 1.\\
+I try from 0.1 to 1 and compare the results. I find the 0.4 is the best, so I only report this.
+My Matlab code is followed and is saved as \textbf{d.m} and \textbf{gama.m}
 \begin{lstlisting}
+	%d.m
 	clc,clear;
 	I1=imread("hw1_dark_road_1.jpg");
 	I2=imread("hw1_dark_road_2.jpg");
 	I3=imread("hw1_dark_road_3.jpg");
 
-	I1_process=gama(im2double(I1),0.4);
+	I1_process=gama(im2double(I1),0.5);
 	figure('name','幂律变换后的图片','NumberTitle','off');
 	imshow(I1_process);         %display the process image
 	imwrite(I1_process,"result/I1_gama.jpg","jpg");
 
-	I2_process=gama(im2double(I1),0.4);
+	I2_process=gama(im2double(I1),0.5);
 	figure('name','幂律变换后的图片','NumberTitle','off');
 	imshow(I2_process);         %display the process image
 	imwrite(I2_process,"result/I2_gama.jpg","jpg");
 
-	I3_process=gama(im2double(I1),0.4);
+	I3_process=gama(im2double(I1),0.5);
 	figure('name','幂律变换后的图片','NumberTitle','off');
 	imshow(I3_process);         %display the process image
 	imwrite(I3_process,"result/I3_gama.jpg","jpg");
+\end{lstlisting}
+\begin{lstlisting}
+	%gama.m
+	function process_img = gama(img,x)
+    
+    process_img=img.^x;
+
+	end
 \end{lstlisting}
 \end{document}
